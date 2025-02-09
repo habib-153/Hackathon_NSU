@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes moveAlong {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+
+@keyframes floatCloud {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(400%);
+  }
+}
+
+.cloud-1 {
+  top: 20%;
+  left: -20%;
+}
+
+.cloud-2 {
+  top: 40%;
+  left: -20%;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out forwards;
+}
+
+.vertical-timeline-element {
+  transition: all 0.3s ease-in-out;
+}
+
+.vertical-timeline-element:hover .vertical-timeline-element-content {
+  transform: translateY(-8px);
+}
+
+.vertical-timeline-element-icon {
+  transition: all 0.3s ease-in-out;
+}
+
+.vertical-timeline-element:hover .vertical-timeline-element-icon {
+  transform: scale(1.1);
+}
+
+.vertical-timeline::before {
+  background: var(--line-color);
+}
