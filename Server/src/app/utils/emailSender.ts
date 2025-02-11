@@ -24,7 +24,7 @@ const sendEmail = async (email: string, resetLink: string) => {
   });
 
   await transporter.sendMail({
-    from: '"DestinyDiary" <h.r.sihab155@gmail.com>', // sender address
+    from: '"CrimePortal" <h.r.sihab155@gmail.com>', // sender address
     to: email, // list of receivers
     subject: 'Password Reset Link', // Subject line.
     //text: "Hello world?", // plain text body
@@ -32,7 +32,7 @@ const sendEmail = async (email: string, resetLink: string) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Reset Your DestinyDiary Password</title>
+        <title>Reset Your CrimePortal Password</title>
     </head>
     <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f7f6;">
         <table role="presentation" cellpadding="0" cellspacing="0" style="width: 100%; background-color: #f4f7f6;">
@@ -42,7 +42,7 @@ const sendEmail = async (email: string, resetLink: string) => {
                         <!-- Header -->
                         <tr>
                             <td style="background-color: #0d9488; padding: 40px 20px; text-align: center;">
-                                <h1 style="color: #ffffff; margin: 0; font-size: 24px;">DestinyDiary</h1>
+                                <h1 style="color: #ffffff; margin: 0; font-size: 24px;">CrimePortal</h1>
                                 <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 16px;">Password Reset Request</p>
                             </td>
                         </tr>
@@ -50,7 +50,7 @@ const sendEmail = async (email: string, resetLink: string) => {
                         <tr>
                             <td style="padding: 40px 30px;">
                                 <h2 style="color: #333333; margin: 0 0 20px 0; font-size: 20px;">Hello, Traveler!</h2>
-                                <p style="color: #555555; margin: 0 0 25px 0; font-size: 16px; line-height: 1.5;">We received a request to reset the password for your DestinyDiary account. Don't worry – it happens to the best of explorers!</p>
+                                <p style="color: #555555; margin: 0 0 25px 0; font-size: 16px; line-height: 1.5;">We received a request to reset the password for your CrimePortal account. Don't worry – it happens to the best of explorers!</p>
                                 <p style="color: #555555; margin: 0 0 25px 0; font-size: 16px; line-height: 1.5;">To reset your password, click the button below. This link will expire in ${20} min.</p>
                                 
                                 <!-- Button -->
@@ -67,7 +67,7 @@ const sendEmail = async (email: string, resetLink: string) => {
                         <!-- Footer -->
                         <tr>
                             <td style="background-color: #f8fafa; padding: 30px; text-align: center; border-top: 1px solid #eeeeee;">
-                                <p style="color: #999999; margin: 0; font-size: 14px;">DestinyDiary - Your Journey, Your Story</p>
+                                <p style="color: #999999; margin: 0; font-size: 14px;">CrimePortal - Your Journey, Your Story</p>
                                 <p style="color: #999999; margin: 10px 0 0 0; font-size: 12px;">This is an automated message, please do not reply.</p>
                             </td>
                         </tr>
