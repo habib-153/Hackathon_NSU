@@ -65,10 +65,14 @@ const LoginPage = () => {
 
   return (
     <div className="flex relative min-h-[calc(100vh-200px)] w-full flex-col items-center justify-center px-4 py-8">
-      <h3 className="my-2 text-xl sm:text-2xl font-bold text-center">Login with DestinyDiary</h3>
-      <p className="mb-4 text-sm sm:text-base text-center">Welcome Back! Let&lsquo;s Get Started</p>
+      <h3 className="my-2 text-xl sm:text-2xl font-bold text-center">
+        Login with CrimePortal
+      </h3>
+      <p className="mb-4 text-sm sm:text-base text-center">
+        Welcome Back! Let&lsquo;s Get Started
+      </p>
       <div className="w-full max-w-[420px] md:w-[35%]">
-      <DemoCredentials />
+        <DemoCredentials />
         <FXForm
           resolver={zodResolver(loginValidationSchema)}
           onSubmit={onSubmit}
@@ -99,7 +103,6 @@ const LoginPage = () => {
         <div className="text-center text-sm sm:text-base">
           Don&lsquo;t have account? <Link href={"/register"}>Register</Link>
         </div>
-        
       </div>
     </div>
   );

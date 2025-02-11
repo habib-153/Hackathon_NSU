@@ -106,7 +106,9 @@ const Sidebar = ({ specificLinks, title }: SidebarProps) => {
           <div className="w-full space-y-3 flex-grow">
             <Link href={"/"}>
               <div className="mb-6 text-center">
-                <h2 className="text-xl font-bold light:text-gray-600 light:hover:bg-gray-100 rounded-lg px-3 py-2">DestinyDiary</h2>
+                <h2 className="text-xl font-bold light:text-gray-600 light:hover:bg-gray-100 rounded-lg px-3 py-2">
+                  CrimePortal
+                </h2>
               </div>
             </Link>
             <Divider />

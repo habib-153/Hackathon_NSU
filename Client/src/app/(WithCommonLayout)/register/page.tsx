@@ -14,12 +14,15 @@ import { useUserRegistration } from "@/src/hooks/auth.hook";
 import { useUser } from "@/src/context/user.provider";
 
 export default function RegisterPage() {
-  const searchParams = useSearchParams()
-  const redirect = searchParams.get('redirect') || '/';
-  const router = useRouter()
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
+  const router = useRouter();
   const { setIsLoading: userRegLoading } = useUser();
-  const { mutate: handleUserRegistration, isPending, isSuccess } = useUserRegistration();
-  
+  const {
+    mutate: handleUserRegistration,
+    isPending,
+    isSuccess,
+  } = useUserRegistration();
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const userData = {
@@ -44,7 +47,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex h-[calc(100vh-100px)] flex-col items-center justify-center">
-      <h3 className="my-2 text-xl font-bold">Register with DestinyDiary</h3>
+      <h3 className="my-2 text-xl font-bold">Register with CrimePortal</h3>
       <p className="mb-4">Explore Together, Adventure Forever</p>
       <div className="md:w-[35%]">
         <FXForm

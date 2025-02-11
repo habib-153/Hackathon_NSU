@@ -1,38 +1,18 @@
-import Image from "next/image";
 import React from "react";
-
-import logo from "@/src/assets/Logo2.jpg";
 
 const Footer = () => {
   return (
     <>
       <footer className="bg-[#f2f2f2] p-5 bg-base-200 text-base-content">
         <div className="container mx-auto text-[#1a1c1cfd]">
-          <div className="max-w-xl  flex flex-col sm:flex-row gap-3 items-center justify-center mx-auto my-4">
-            <Image
-              alt="logo"
-              className=""
-              height={100}
-              src={logo}
-              width={100}
-            />
-            <div className="font-medium">
-              <p>
-                Every journey begins with a single step. Take yours with us –
-                join our community of explorers and turn your travel dreams into
-                reality.
-              </p>
-            </div>
-          </div>
           <div className="grid sm:grid-cols-2 gap-12 md:grid-cols-4 items-center">
             <aside className="">
-              
               <p>
                 123 Main Street Anytown, USA
                 <br />
                 Postal Code: 12345
                 <br />
-                Support: support@destinydiary.com
+                Support: support@CrimePortal.com
                 <br />
                 (Available : 10:00am to 07:00pm)
               </p>
@@ -93,7 +73,7 @@ const Footer = () => {
                   </svg>
                 </a>
               </div>
-              <p>@destinyDiary 2024</p>
+              <p>@CrimePortal 2024</p>
             </nav>
           </div>
         </div>

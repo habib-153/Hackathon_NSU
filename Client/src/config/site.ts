@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "DestinyDiary || Travel Tips & Destination Guides",
+  name: "CrimePortal || Travel Tips & Destination Guides",
   description: "🚀 Your ultimate platform for sharing travel stories, discovering destinations, and connecting with fellow adventurers!",
   navItems: [
     {

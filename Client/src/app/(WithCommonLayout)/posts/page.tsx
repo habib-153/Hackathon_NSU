@@ -14,14 +14,10 @@ import { Chip } from "@nextui-org/chip";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSearchParams } from "next/navigation";
 
-import PostCard from "@/src/components/UI/PostCard";
 import envConfig from "@/src/config/envConfig";
-import { useGetAllPosts } from "@/src/hooks/post.hook";
 import { IPost } from "@/src/types";
 import { useUser } from "@/src/context/user.provider";
 import AuthModal from "@/src/components/UI/modal/AuthModal/AuthModal";
-import CreatePostModal from "@/src/components/UI/modal/PostModals/CreatePostModal";
-import PostCardSkeleton from "@/src/components/UI/PostCardSkeleton";
 
 const Categories = [
   "Adventure",
@@ -77,25 +73,24 @@ const Posts = () => {
     setSort(String(key));
   };
 
-  const apiUrl = `${envConfig.baseApi}/posts?${new URLSearchParams({
-    ...(debouncedSearchTerm && { searchTerm: debouncedSearchTerm }),
-    ...(category && { category }),
-    ...(sort && { sort }),
-    page: page.toString(),
-  }).toString()}`;
+  // const apiUrl = `${envConfig.baseApi}/posts?${new URLSearchParams({
+  //   ...(debouncedSearchTerm && { searchTerm: debouncedSearchTerm }),
+  //   ...(category && { category }),
+  //   ...(sort && { sort }),
+  //   page: page.toString(),
+  // }).toString()}`;
 
-  const { data: postData } = useGetAllPosts(apiUrl);
 
-  useEffect(() => {
-    if (postData?.data) {
-      if (page === 1) {
-        setPosts(postData?.data);
-      } else {
-        setPosts((prev) => [...prev, ...postData?.data]);
-      }
-      setHasMore(postData?.data?.length === 10);
-    }
-  }, [postData, page]);
+  // useEffect(() => {
+  //   if (postData?.data) {
+  //     if (page === 1) {
+  //       setPosts(postData?.data);
+  //     } else {
+  //       setPosts((prev) => [...prev, ...postData?.data]);
+  //     }
+  //     setHasMore(postData?.data?.length === 10);
+  //   }
+  // }, [postData, page]);
 
   return (
     <div className="max-w-7xl relative mx-auto py-5">
@@ -108,8 +103,8 @@ const Posts = () => {
         </Button>
       </div>
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold mb-2">Travel Posts</h1>
-        <p className="">Discover and share travel experiences</p>
+        <h1 className="text-3xl font-bold mb-2">Posts</h1>
+        {/* <p className=""></p> */}
       </div>
 
       <Card className="mb-8">
@@ -207,21 +202,21 @@ const Posts = () => {
           loader={
             hasMore && (
               <div className="grid lg:grid-cols-2 gap-6">
-                <PostCardSkeleton />
-                <PostCardSkeleton />
+                {/* <PostCardSkeleton />
+                <PostCardSkeleton /> */}
               </div>
             )
           }
           next={() => setPage((prev) => prev + 1)}
         >
           <div className="my-6 grid grid-cols-1 px-1 lg:grid-cols-2 gap-6">
-            {posts
+            {/* {posts
               ? posts?.map((post: IPost, index: number) => (
                   <PostCard key={index} full={false} post={post} />
                 ))
               : Array.from({ length: 2 }).map((_, index) => (
                   <PostCardSkeleton key={index} />
-                ))}
+                ))} */}
           </div>
         </InfiniteScroll>
       </div>
@@ -232,9 +227,9 @@ const Posts = () => {
           setOpenAuthModal={setOpenAuthModal}
         />
       )}
-      {openModal && (
+      {/* {openModal && (
         <CreatePostModal isOpen={openModal} setIsOpen={setOpenModal} />
-      )}
+      )} */}
     </div>
   );
 };
