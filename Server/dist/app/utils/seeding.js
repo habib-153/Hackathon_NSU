@@ -23,7 +23,7 @@ const seed = () => __awaiter(void 0, void 0, void 0, function* () {
         const admin = yield user_model_1.User.findOne({
             role: user_constant_1.USER_ROLE.ADMIN,
             email: config_1.default.admin_email,
-            status: user_constant_1.USER_STATUS.BASIC,
+            status: user_constant_1.USER_STATUS.ACTIVE,
         });
         if (!admin) {
             console.log('Seeding started...');
@@ -34,7 +34,7 @@ const seed = () => __awaiter(void 0, void 0, void 0, function* () {
                 password: config_1.default.admin_password,
                 profilePhoto: config_1.default.admin_profile_photo,
                 mobileNumber: config_1.default.admin_mobile_number,
-                status: user_constant_1.USER_STATUS.BASIC,
+                status: user_constant_1.USER_STATUS.ACTIVE,
             });
             console.log('Admin created successfully...');
             console.log('Seeding completed...');

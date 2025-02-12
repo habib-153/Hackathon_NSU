@@ -45,7 +45,7 @@ const userSchema = new mongoose_1.Schema({
     status: {
         type: String,
         enum: Object.keys(user_constant_1.USER_STATUS),
-        default: user_constant_1.USER_STATUS.BASIC,
+        default: user_constant_1.USER_STATUS.ACTIVE,
     },
     passwordChangedAt: {
         type: Date,
@@ -58,45 +58,14 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         default: null
     },
-    followers: [
-        {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'User',
-        },
-    ],
-    following: [
-        {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'User',
-        },
-    ],
     isVerified: {
         type: Boolean,
         default: false,
-    },
-    totalUpVotes: {
-        type: Number,
-        default: 0,
     },
     postCount: {
         type: Number,
         default: 0,
     },
-    paymentStatus: {
-        type: String,
-    },
-    transactionId: {
-        type: String,
-    },
-    premiumStart: {
-        type: Date,
-    },
-    premiumEnd: {
-        type: Date,
-    },
-    premiumCharge: {
-        type: Number,
-    }
 }, {
     timestamps: true,
 });
