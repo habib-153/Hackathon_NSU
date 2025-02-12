@@ -47,28 +47,6 @@ const getSingleUser = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 
         data: user,
     });
 }));
-const followUser = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const followingId = req.params.followingId;
-    const userData = req.user;
-    const result = yield user_service_1.UserServices.addFollowingInDB(userData, followingId);
-    (0, sendResponse_1.default)(res, {
-        success: true,
-        statusCode: http_status_1.default.OK,
-        message: 'You are now following this profile',
-        data: result,
-    });
-}));
-const unfollowUser = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const followingId = req.params.followingId;
-    const userData = req.user;
-    const result = yield user_service_1.UserServices.removeFollowingFromDB(userData, followingId);
-    (0, sendResponse_1.default)(res, {
-        success: true,
-        statusCode: http_status_1.default.OK,
-        message: 'You unfollow this profile',
-        data: result,
-    });
-}));
 const getVerified = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.UserServices.getVerified(req.body, req.user);
     (0, sendResponse_1.default)(res, {
@@ -102,8 +80,6 @@ exports.UserControllers = {
     getSingleUser,
     userRegister,
     getAllUsers,
-    followUser,
-    unfollowUser,
     getVerified,
     updateUser,
     deleteUser

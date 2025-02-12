@@ -6,8 +6,8 @@ exports.USER_ROLE = {
     USER: 'USER',
 };
 exports.USER_STATUS = {
-    BASIC: 'BASIC',
-    PREMIUM: 'PREMIUM',
+    ACTIVE: 'ACTIVE',
+    BAN: 'BAN',
 };
 exports.DEFAULT_PROFILE_URL = 'https://www.pngall.com/wp-content/uploads/5/Profile-PNG-Free-Download.png';
 exports.UserSearchableFields = [

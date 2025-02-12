@@ -18,6 +18,14 @@ const createPostIntoDB = async (payload: Partial<TPost>, image: TImageFile) => {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found');
   }
 
+  if (user.status == 'BAN'){
+    throw new AppError(httpStatus.BAD_REQUEST, 'User is banned');
+  }
+
+  if (user.isVerified == false){
+    throw new AppError(httpStatus.BAD_REQUEST, 'User is not verified')
+  }
+
   const result = (await Post.create(payload)).populate('author');
   await User.findByIdAndUpdate(user?._id, { $inc: { postCount: 1 } });
 
@@ -67,22 +75,6 @@ const getAllPostsFromDB = async (query: Record<string, unknown>) => {
         foreignField: '_id',
         as: 'downVotes',
       },
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'author.followers',
-        foreignField: '_id',
-        as: 'author.followers',
-      }
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'author.following',
-        foreignField: '_id',
-        as: 'author.following',
-      }
     }
   ];
 
@@ -176,22 +168,6 @@ const getSinglePostFromDB = async (id: string) => {
         foreignField: '_id',
         as: 'downVotes',
       },
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'author.followers',
-        foreignField: '_id',
-        as: 'author.followers',
-      }
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'author.following',
-        foreignField: '_id',
-        as: 'author.following',
-      }
     }
   ];
 
@@ -262,11 +238,6 @@ const addPostUpvoteIntoDB = async (
       { $addToSet: { upVotes: _id } },
       { new: true, runValidators: true, session }
     ).populate('upVotes');
-    await User.findByIdAndUpdate(
-      post.author,
-      { $inc: { totalUpVotes: 1 } },
-      { new: true, session }
-    );
 
     await session.commitTransaction();
     return result;
@@ -305,11 +276,6 @@ const removePostUpvoteFromDB = async (
       { $pull: { upVotes: _id } },
       { new: true, runValidators: true, session }
     ).populate('upVotes');
-    await User.findByIdAndUpdate(
-      post.author,
-      { $inc: { totalUpVotes: -1 } },
-      { new: true, session }
-    );
 
     await session.commitTransaction();
     return result;

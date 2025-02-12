@@ -19,7 +19,7 @@ const createUserValidationSchema = zod_1.z.object({
         password: zod_1.z.string({
             required_error: 'Password is required',
         }),
-        status: zod_1.z.nativeEnum(user_constant_1.USER_STATUS).default(user_constant_1.USER_STATUS.BASIC),
+        status: zod_1.z.nativeEnum(user_constant_1.USER_STATUS).default(user_constant_1.USER_STATUS.ACTIVE),
         mobileNumber: zod_1.z.string().optional(),
     }),
 });

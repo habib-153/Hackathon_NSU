@@ -28,6 +28,12 @@ const createPostIntoDB = (payload, image) => __awaiter(void 0, void 0, void 0, f
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found');
     }
+    if (user.status == 'BAN') {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'User is banned');
+    }
+    if (user.isVerified == false) {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'User is not verified');
+    }
     const result = (yield post_model_1.Post.create(payload)).populate('author');
     yield user_model_1.User.findByIdAndUpdate(user === null || user === void 0 ? void 0 : user._id, { $inc: { postCount: 1 } });
     return result;
@@ -73,22 +79,6 @@ const getAllPostsFromDB = (query) => __awaiter(void 0, void 0, void 0, function*
                 foreignField: '_id',
                 as: 'downVotes',
             },
-        },
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'author.followers',
-                foreignField: '_id',
-                as: 'author.followers',
-            }
-        },
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'author.following',
-                foreignField: '_id',
-                as: 'author.following',
-            }
         }
     ];
     if (searchTerm) {
@@ -171,22 +161,6 @@ const getSinglePostFromDB = (id) => __awaiter(void 0, void 0, void 0, function* 
                 foreignField: '_id',
                 as: 'downVotes',
             },
-        },
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'author.followers',
-                foreignField: '_id',
-                as: 'author.followers',
-            }
-        },
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'author.following',
-                foreignField: '_id',
-                as: 'author.following',
-            }
         }
     ];
     const result = yield post_model_1.Post.aggregate(aggregationPipeline);
@@ -228,7 +202,6 @@ const addPostUpvoteIntoDB = (postId, userData) => __awaiter(void 0, void 0, void
             yield post_model_1.Post.findByIdAndUpdate(postId, { $pull: { downVotes: _id } }, { new: true, runValidators: true, session });
         }
         const result = yield post_model_1.Post.findByIdAndUpdate(postId, { $addToSet: { upVotes: _id } }, { new: true, runValidators: true, session }).populate('upVotes');
-        yield user_model_1.User.findByIdAndUpdate(post.author, { $inc: { totalUpVotes: 1 } }, { new: true, session });
         yield session.commitTransaction();
         return result;
     }
@@ -256,7 +229,6 @@ const removePostUpvoteFromDB = (postId, userData) => __awaiter(void 0, void 0, v
     try {
         session.startTransaction();
         const result = yield post_model_1.Post.findByIdAndUpdate(postId, { $pull: { upVotes: _id } }, { new: true, runValidators: true, session }).populate('upVotes');
-        yield user_model_1.User.findByIdAndUpdate(post.author, { $inc: { totalUpVotes: -1 } }, { new: true, session });
         yield session.commitTransaction();
         return result;
     }

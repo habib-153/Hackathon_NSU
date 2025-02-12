@@ -1,14 +1,20 @@
 import { Types } from "mongoose";
-import { POST_STATUS, TPostCategory } from "./post.constant";
+import { DISTRICTS } from "./post.constant";
+
+type District = (typeof DISTRICTS)[number]
 
 export type TPost = {
-    title: string;
-    description: string;
-    image: string;
-    category: TPostCategory
-    author: Types.ObjectId
-    status: keyof typeof POST_STATUS
-    upVotes:  Types.ObjectId[];
-    downVotes:  Types.ObjectId[];
-    isDeleted: boolean
-}
+  title: string;
+  description: string;
+  image: string;
+  author: Types.ObjectId;
+  city: District;
+  location: string;
+  upVotes: Types.ObjectId[];
+  downVotes: Types.ObjectId[];
+  isDeleted: boolean;
+  postDate: Date;
+  crimeDate: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
