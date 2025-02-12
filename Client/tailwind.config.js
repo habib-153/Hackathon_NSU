@@ -13,6 +13,18 @@ module.exports = {
         sans: ["var(--font-sans)"],
         mono: ["var(--font-mono)"],
       },
+      colors: {
+        // (Header, Navbar, Buttons)
+        primary: "#1E3A8A",
+        //Alerts, Warnings, Important Actions
+        warning: "#DC2626",
+        //Background, Cards, Text Boxes
+        secondary: "#F3F4F6",
+        //Verified Posts & Status Badges
+        verified: "#16A34A",
+        
+        white: "#FFFFFF",
+      }
     },
   },
   darkMode: "class",
