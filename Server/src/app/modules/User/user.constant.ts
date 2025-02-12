@@ -4,8 +4,8 @@ export const USER_ROLE = {
 } as const;
 
 export const USER_STATUS = {
-  BASIC: 'BASIC',
-  PREMIUM: 'PREMIUM',
+  ACTIVE: 'ACTIVE',
+  BAN: 'BAN',
 } as const;
 
 export const DEFAULT_PROFILE_URL =

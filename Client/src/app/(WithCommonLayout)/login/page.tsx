@@ -15,7 +15,7 @@ import { useUserLogin } from "@/src/hooks/auth.hook";
 
 const DemoCredentials = () => (
   <Card className="mt-4 light:bg-gray-50 md:absolute md:top-0 md:right-1 lg:min-w-64 lg:right-5">
-    <CardHeader className="p-4 sm:p-6">
+    {/* <CardHeader className="p-4 sm:p-6">
       <h2 className="text-base sm:text-lg">Demo Credentials</h2>
     </CardHeader>
     <CardBody className="p-4 sm:p-6">
@@ -35,7 +35,7 @@ const DemoCredentials = () => (
           </div>
         </div>
       </div>
-    </CardBody>
+    </CardBody> */}
   </Card>
 );
 
