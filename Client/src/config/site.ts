@@ -5,12 +5,8 @@ export const siteConfig = {
   description: "🚀 Your ultimate platform for sharing travel stories, discovering destinations, and connecting with fellow adventurers!",
   navItems: [
     {
-      label: "Home",
-      href: "/",
-    },
-    {
       label: "NewsFeed",
-      href: "/posts",
+      href: "/",
     },
     {
       label: "Contact",
@@ -22,10 +18,6 @@ export const siteConfig = {
     },
   ],
   navMenuItems: [
-    {
-      label: "Home",
-      href: "/",
-    },
     {
       label: "About",
       href: "/about",
