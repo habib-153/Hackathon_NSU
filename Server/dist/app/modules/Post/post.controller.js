@@ -23,6 +23,7 @@ const createPost = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, 
         throw new AppError_1.default(400, 'Please upload an image');
     }
     const result = yield post_service_1.PostServices.createPostIntoDB(req.body, req.file);
+    console.log(req.body);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,

@@ -12,7 +12,7 @@ const createPostIntoDB = async (payload: Partial<TPost>, image: TImageFile) => {
   if (image) {
     payload.image = image.path;
   }
-
+console.log(payload, 'Hello')
   const user = await User.findById(payload.author);
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found');
@@ -35,6 +35,7 @@ const createPostIntoDB = async (payload: Partial<TPost>, image: TImageFile) => {
 const getAllPostsFromDB = async (query: Record<string, unknown>) => {
   const { sort, searchTerm, category, page = 1, limit = 10 } = query;
 
+  //console.log(query, 'Hello')
   const pageNumber = Math.max(Number(page), 1);
   const limitNumber = Math.max(Number(limit), 1);
   const skip = (pageNumber - 1) * limitNumber;
