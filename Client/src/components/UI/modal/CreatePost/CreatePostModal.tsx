@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
-import React, { ChangeEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, useState, useEffect, Key } from "react";
 import {
   FieldValues,
   FormProvider,
@@ -19,7 +19,12 @@ import generateImageDescription from "@/src/services/ImageDescription";
 import { useCreatePost } from "@/src/hooks/post.hook";
 import { useUser } from "@/src/context/user.provider";
 import dateToISO from "@/src/utils/dateToISO";
-import CTSelect from "@/src/components/form/CTSelect";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@nextui-org/dropdown";
 
 interface IPostModalProps {
   isOpen: boolean;
@@ -54,18 +59,6 @@ const CreatePostModal = ({ isOpen, setIsOpen }: IPostModalProps) => {
   );
   const [selectedDivision, setSelectedDivision] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
-console.log(selectedDivision)
-  const divisionsOptions = divisions.map((division) => ({
-    key: division.id,
-    label: division.name,
-    value: division.id,
-  }));
-
-  const districtsOptions = districts.map((district) => ({
-    key: district.id,
-    label: district.name,
-    value: district.id,
-  }));
 
   useEffect(() => {
     fetch("https://bdapi.vercel.app/api/v.1/division")
@@ -79,16 +72,30 @@ console.log(selectedDivision)
         .then((response) => response.json())
         .then((data) => setDistricts(data.data));
     }
+    console.log(selectedDivision);
   }, [selectedDivision]);
+
+  const handleDivisionSelect = (key: Key) => {
+    setSelectedDivision(String(key));
+    setSelectedDistrict(""); // Reset district when division changes
+  };
+
+  const handleDistrictSelect = (key: Key) => {
+    setSelectedDistrict(String(key));
+  };
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     const formData = new FormData();
 
     const postData = {
       ...data,
-      dateFound: dateToISO(data.dateFound),
-      user: user!._id,
-      location: `${data.division}, ${data.district}`,
+      crimeDate: dateToISO(data.crimeDate),
+      author: user!._id,
+      division: selectedDivision,
+      district: selectedDistrict,
+      location: `${
+        divisions.find((div) => div.id === selectedDivision)?.name || ""
+      }, ${districts.find((dist) => dist.id === selectedDistrict)?.name || ""}`,
     };
 
     formData.append("data", JSON.stringify(postData));
@@ -121,7 +128,7 @@ console.log(selectedDivision)
     try {
       const response = await generateImageDescription(
         imagePreviews[0],
-        "write a description for this crime scene based on the image"
+        "write a description for this scenario based on the image"
       );
 
       methods.setValue("description", response);
@@ -136,6 +143,7 @@ console.log(selectedDivision)
   if (!createPostPending && isSuccess) {
     router.push("/");
   }
+  console.log(selectedDistrict, selectedDivision);
 
   return (
     <>
@@ -150,7 +158,7 @@ console.log(selectedDivision)
             <>
               {createPostPending && <Loading />}
               <div className="h-full rounded-xl bg-gradient-to-b from-default-100 px-[73px] py-12">
-                <h1 className="text-2xl font-semibold">Post a found item</h1>
+                <h1 className="text-2xl font-semibold">Post a Crime</h1>
                 <Divider className="mb-5 mt-3" />
                 <FormProvider {...methods}>
                   <form onSubmit={handleSubmit(onSubmit)}>
@@ -164,23 +172,61 @@ console.log(selectedDivision)
                     </div>
                     <div className="flex flex-wrap gap-2 py-2">
                       <div className="min-w-fit flex-1">
-                        <CTSelect
-                          label="Division"
-                          name="division"
-                          options={divisionsOptions}
-                          onChange={(value: string) =>
-                            setSelectedDivision(value)
-                          }
-                        />
+                        <Dropdown>
+                          <DropdownTrigger>
+                            <Button
+                              className="w-full justify-between"
+                              variant="bordered"
+                            >
+                              {divisions.find(
+                                (div) => div.id === selectedDivision
+                              )?.name || "Select Division"}
+                            </Button>
+                          </DropdownTrigger>
+                          <DropdownMenu
+                            aria-label="Select division"
+                            selectedKeys={
+                              selectedDivision ? [selectedDivision] : []
+                            }
+                            selectionMode="single"
+                            onAction={handleDivisionSelect}
+                          >
+                            {divisions.map((division) => (
+                              <DropdownItem key={division.id}>
+                                {division.name}
+                              </DropdownItem>
+                            ))}
+                          </DropdownMenu>
+                        </Dropdown>
                       </div>
                       <div className="min-w-fit flex-1">
-                        <CTSelect
-                          disabled={!selectedDivision}
-                          label="District"
-                          name="district"
-                          options={districtsOptions}
-                          onChange={(value) => setSelectedDistrict(value)}
-                        />
+                        <Dropdown>
+                          <DropdownTrigger>
+                            <Button
+                              className="w-full justify-between"
+                              variant="bordered"
+                              isDisabled={!selectedDivision}
+                            >
+                              {districts.find(
+                                (dist) => dist.id === selectedDistrict
+                              )?.name || "Select District"}
+                            </Button>
+                          </DropdownTrigger>
+                          <DropdownMenu
+                            aria-label="Select district"
+                            selectedKeys={
+                              selectedDistrict ? [selectedDistrict] : []
+                            }
+                            selectionMode="single"
+                            onAction={handleDistrictSelect}
+                          >
+                            {districts.map((district) => (
+                              <DropdownItem key={district.id}>
+                                {district.name}
+                              </DropdownItem>
+                            ))}
+                          </DropdownMenu>
+                        </Dropdown>
                       </div>
                     </div>
                     <div className="flex flex-wrap gap-2 py-2">
