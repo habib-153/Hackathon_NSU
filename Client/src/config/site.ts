@@ -1,16 +1,13 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "CrimePortal || Travel Tips & Destination Guides",
-  description: "🚀 Your ultimate platform for sharing travel stories, discovering destinations, and connecting with fellow adventurers!",
+  name: "Warden || Crime Reporting and Community Verification Platform",
+  description:
+    "🚀 Your ultimate platform for sharing travel stories, discovering destinations, and connecting with fellow adventurers!",
   navItems: [
     {
-      label: "Home",
-      href: "/",
-    },
-    {
       label: "NewsFeed",
-      href: "/posts",
+      href: "/",
     },
     {
       label: "Contact",
@@ -23,10 +20,6 @@ export const siteConfig = {
   ],
   navMenuItems: [
     {
-      label: "Home",
-      href: "/",
-    },
-    {
       label: "About",
       href: "/about",
     },
@@ -37,6 +30,6 @@ export const siteConfig = {
     {
       label: "Contact",
       href: "/contact",
-    }
+    },
   ],
 };

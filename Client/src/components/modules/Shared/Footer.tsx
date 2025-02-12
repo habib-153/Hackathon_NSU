@@ -12,7 +12,7 @@ const Footer = () => {
                 <br />
                 Postal Code: 12345
                 <br />
-                Support: support@CrimePortal.com
+                Support: support@Warden.com
                 <br />
                 (Available : 10:00am to 07:00pm)
               </p>
@@ -73,7 +73,7 @@ const Footer = () => {
                   </svg>
                 </a>
               </div>
-              <p>@CrimePortal 2024</p>
+              <p>@Warden 2024</p>
             </nav>
           </div>
         </div>

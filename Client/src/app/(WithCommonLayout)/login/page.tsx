@@ -66,7 +66,7 @@ const LoginPage = () => {
   return (
     <div className="flex relative min-h-[calc(100vh-200px)] w-full flex-col items-center justify-center px-4 py-8">
       <h3 className="my-2 text-xl sm:text-2xl font-bold text-center">
-        Login with CrimePortal
+        Login with Warden
       </h3>
       <p className="mb-4 text-sm sm:text-base text-center">
         Welcome Back! Let&lsquo;s Get Started

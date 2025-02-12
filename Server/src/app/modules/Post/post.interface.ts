@@ -8,7 +8,8 @@ export type TPost = {
   description: string;
   image: string;
   author: Types.ObjectId;
-  city: District;
+  district: District;
+  division: string;
   location: string;
   upVotes: Types.ObjectId[];
   downVotes: Types.ObjectId[];

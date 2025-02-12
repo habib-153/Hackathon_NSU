@@ -107,7 +107,7 @@ const Sidebar = ({ specificLinks, title }: SidebarProps) => {
             <Link href={"/"}>
               <div className="mb-6 text-center">
                 <h2 className="text-xl font-bold light:text-gray-600 light:hover:bg-gray-100 rounded-lg px-3 py-2">
-                  CrimePortal
+                  Warden
                 </h2>
               </div>
             </Link>

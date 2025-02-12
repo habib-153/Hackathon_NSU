@@ -18,6 +18,7 @@ import envConfig from "@/src/config/envConfig";
 import { IPost } from "@/src/types";
 import { useUser } from "@/src/context/user.provider";
 import AuthModal from "@/src/components/UI/modal/AuthModal/AuthModal";
+import CreatePostModal from "@/src/components/UI/modal/CreatePost/CreatePostModal";
 
 const Categories = [
   "Adventure",
@@ -102,12 +103,8 @@ const Posts = () => {
           Create A Post
         </Button>
       </div>
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold mb-2">Posts</h1>
-        {/* <p className=""></p> */}
-      </div>
 
-      <Card className="mb-8">
+      <Card className="my-16">
         <CardBody>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Input
@@ -227,9 +224,9 @@ const Posts = () => {
           setOpenAuthModal={setOpenAuthModal}
         />
       )}
-      {/* {openModal && (
+      {openModal && (
         <CreatePostModal isOpen={openModal} setIsOpen={setOpenModal} />
-      )} */}
+      )}
     </div>
   );
 };

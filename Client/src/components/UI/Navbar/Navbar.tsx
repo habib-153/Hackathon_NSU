@@ -41,7 +41,7 @@ export const Navbar = () => {
               src={Logo}
               width={50}
             />
-            <p className="font-bold text-2xl text-inherit">CrimePortal</p>
+            <p className="font-bold text-2xl text-inherit">Warden</p>
           </NextLink>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 ml-2">

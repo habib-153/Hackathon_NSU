@@ -47,7 +47,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex h-[calc(100vh-100px)] flex-col items-center justify-center">
-      <h3 className="my-2 text-xl font-bold">Register with CrimePortal</h3>
+      <h3 className="my-2 text-xl font-bold">Register with Warden</h3>
       <p className="mb-4">Explore Together, Adventure Forever</p>
       <div className="md:w-[35%]">
         <FXForm
