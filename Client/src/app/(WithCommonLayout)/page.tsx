@@ -83,7 +83,7 @@ const Posts = () => {
   const handleSortSelect = (key: Key) => {
     setSort(String(key));
   };
-  console.log(districts, divisions)
+
   const handleDivisionSelect = (key: Key) => {
     setSelectedDivision(String(key));
     setSelectedDistrict("");
@@ -117,7 +117,7 @@ const Posts = () => {
               <Dropdown>
                 <DropdownTrigger>
                   <Button className="w-[120px] md:w-[160px] justify-between" variant="bordered">
-                    {selectedDivision || "Select Division"}
+                    {divisions.find((div) => div.id === selectedDivision)?.name || "Select Division"}
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu
@@ -127,7 +127,7 @@ const Posts = () => {
                   onAction={handleDivisionSelect}
                 >
                   {divisions.map((division) => (
-                    <DropdownItem key={division?.id}>{division.name}</DropdownItem>
+                    <DropdownItem key={division?.id} >{division.name}</DropdownItem>
                   ))}
                 </DropdownMenu>
               </Dropdown>
@@ -136,7 +136,7 @@ const Posts = () => {
               <Dropdown>
                 <DropdownTrigger>
                   <Button className="w-[120px] md:w-[160px] justify-between" variant="bordered">
-                    {selectedDistrict || "Select District"}
+                    {districts.find((dist) => dist.id === selectedDistrict)?.name || "Select District"}
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu
