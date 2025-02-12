@@ -72,7 +72,7 @@ export default function RegisterPage() {
             />
           </div>
           <Button
-            className="my-3 w-full rounded-md bg-default-900 text-default"
+            className="my-3 w-full rounded-2xl bg-default-900 text-default"
             size="lg"
             type="submit"
           >

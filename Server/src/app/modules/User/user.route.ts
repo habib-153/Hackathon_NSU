@@ -26,13 +26,4 @@ router.get('/', auth(USER_ROLE.ADMIN), UserControllers.getAllUsers);
 router.get('/:id', UserControllers.getSingleUser);
 router.put('/:id', auth(USER_ROLE.ADMIN, USER_ROLE.USER), UserControllers.updateUser);
 router.delete('/:id', auth(USER_ROLE.ADMIN), UserControllers.deleteUser);
-router.post(
-  '/follow/:followingId',
-  auth(USER_ROLE.USER),
-  UserControllers.followUser
-);
-router.delete(
-  '/unfollow/:followingId',
-  auth(USER_ROLE.USER, USER_ROLE.ADMIN),
-  UserControllers.unfollowUser
-);
+

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import httpStatus from 'http-status';
 import { QueryBuilder } from '../../builder/QueryBuilder';
@@ -5,8 +6,6 @@ import AppError from '../../errors/AppError';
 import { UserSearchableFields } from './user.constant';
 import { TUser } from './user.interface';
 import { User } from './user.model';
-import mongoose from 'mongoose';
-import { initiatePayment } from '../../utils/payment';
 
 const createUser = async (payload: TUser) => {
   const user = await User.create(payload);
@@ -54,40 +53,7 @@ const getVerified = async (
     throw new AppError(httpStatus.NOT_FOUND, "User doesn't exist!");
   }
 
-  const session = await mongoose.startSession();
-
-  try {
-    session.startTransaction();
-
-    const transactionId = `TXN-${Date.now()}`;
-
-    const userInfo = {
-      ...payload,
-      transactionId,
-    };
-
-    const result = await User.findByIdAndUpdate(_id, userInfo, {
-      new: true,
-    });
-
-    const paymentData = {
-      transactionId: transactionId,
-      amount: payload?.premiumCharge,
-      customerName: user.name,
-      customerEmail: user.email,
-      customerMobile: user.mobileNumber,
-    };
-
-    const payment = await initiatePayment(paymentData);
-
-    await session.commitTransaction();
-    await session.endSession();
-
-    return { payment, result };
-  } catch (error) {
-    await session.abortTransaction();
-    await session.endSession();
-  }
+  return user
 };
 
 const updateUserIntoDB = async (payload: Partial<TUser>, id: string) => {
@@ -108,8 +74,6 @@ export const UserServices = {
   createUser,
   getAllUsersFromDB,
   getSingleUserFromDB,
-  addFollowingInDB,
-  removeFollowingFromDB,
   getVerified,
   updateUserIntoDB,
   deleteUserFromDB,
