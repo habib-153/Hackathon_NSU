@@ -33,7 +33,7 @@ const userSchema = new Schema<TUser, IUserModel>(
     status: {
       type: String,
       enum: Object.keys(USER_STATUS),
-      default: USER_STATUS.BASIC,
+      default: USER_STATUS.ACTIVE,
     },
     passwordChangedAt: {
       type: Date,
@@ -46,45 +46,14 @@ const userSchema = new Schema<TUser, IUserModel>(
       type: String,
       default: null
     },
-    followers: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
-    following: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
     isVerified: {
       type: Boolean,
       default: false,
-    },
-    totalUpVotes: {
-      type: Number,
-      default: 0,
     },
     postCount: {
       type: Number,
       default: 0,
     },
-    paymentStatus: {
-      type: String,
-    },
-    transactionId: {
-      type: String,
-    },
-    premiumStart: {
-      type: Date,
-    },
-    premiumEnd: {
-      type: Date,
-    },
-    premiumCharge: {
-      type: Number,
-    }
   },
   {
     timestamps: true,
