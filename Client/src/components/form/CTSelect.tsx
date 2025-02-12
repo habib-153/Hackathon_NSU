@@ -4,10 +4,9 @@ import { useFormContext } from "react-hook-form";
 import { IInput } from "@/src/types";
 
 interface IProps extends IInput {
-  options: {
-    key: string;
-    label: string;
-  }[];
+  options: { key: string; label: string; value: string }[];
+  disabled?: boolean;
+  onChange?: (value: string) => void;
 }
 
 export default function CTSelect({

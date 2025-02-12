@@ -20,18 +20,10 @@ import { useUser } from "@/src/context/user.provider";
 import AuthModal from "@/src/components/UI/modal/AuthModal/AuthModal";
 import CreatePostModal from "@/src/components/UI/modal/CreatePost/CreatePostModal";
 
-const Categories = [
-  "Adventure",
-  "Exploration",
-  "Business Travel",
-  "Family Vacation",
-  "Relaxation",
-  "Luxury Travel",
-];
-
 const SortOptions = [
+  { key: "date", name: "Date" },
   { key: "upvotes", name: "Most Upvoted" },
-  { key: "downvotes", name: "Most Downvoted" },
+  { key: "verification", name: "Verification Score" },
 ];
 
 const Posts = () => {
@@ -49,6 +41,10 @@ const Posts = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [posts, setPosts] = useState<IPost[]>([]);
+  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
+  const [districts, setDistricts] = useState<{ id: string; name: string }[]>([]);
+  const [selectedDivision, setSelectedDivision] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
 
   // Debounce implementation
   useEffect(() => {
@@ -66,6 +62,20 @@ const Posts = () => {
     setFilterApplied(Boolean(searchInput || category || sort));
   }, [searchInput, category, sort]);
 
+  useEffect(() => {
+    fetch("https://bdapi.vercel.app/api/v.1/division")
+      .then((response) => response.json())
+      .then((data) => setDivisions(data.data));
+  }, []);
+
+  useEffect(() => {
+    if (selectedDivision) {
+      fetch(`https://bdapi.vercel.app/api/v.1/district/${selectedDivision}`)
+        .then((response) => response.json())
+        .then((data) => setDistricts(data.data));
+    }
+  }, [selectedDivision]);
+
   const handleCategorySelect = (key: Key) => {
     setCategory(String(key));
   };
@@ -73,25 +83,15 @@ const Posts = () => {
   const handleSortSelect = (key: Key) => {
     setSort(String(key));
   };
+  console.log(districts, divisions)
+  const handleDivisionSelect = (key: Key) => {
+    setSelectedDivision(String(key));
+    setSelectedDistrict("");
+  };
 
-  // const apiUrl = `${envConfig.baseApi}/posts?${new URLSearchParams({
-  //   ...(debouncedSearchTerm && { searchTerm: debouncedSearchTerm }),
-  //   ...(category && { category }),
-  //   ...(sort && { sort }),
-  //   page: page.toString(),
-  // }).toString()}`;
-
-
-  // useEffect(() => {
-  //   if (postData?.data) {
-  //     if (page === 1) {
-  //       setPosts(postData?.data);
-  //     } else {
-  //       setPosts((prev) => [...prev, ...postData?.data]);
-  //     }
-  //     setHasMore(postData?.data?.length === 10);
-  //   }
-  // }, [postData, page]);
+  const handleDistrictSelect = (key: Key) => {
+    setSelectedDistrict(String(key));
+  };
 
   return (
     <div className="max-w-7xl relative mx-auto py-5">
@@ -106,50 +106,72 @@ const Posts = () => {
 
       <Card className="my-16">
         <CardBody>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               placeholder="Search posts..."
               startContent={<Search className="text-gray-400" />}
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
             />
+            <div className="flex gap-2">
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button className="w-[120px] md:w-[160px] justify-between" variant="bordered">
+                    {selectedDivision || "Select Division"}
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Select division"
+                  selectedKeys={selectedDivision ? [selectedDivision] : []}
+                  selectionMode="single"
+                  onAction={handleDivisionSelect}
+                >
+                  {divisions.map((division) => (
+                    <DropdownItem key={division?.id}>{division.name}</DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
 
-            <Dropdown>
-              <DropdownTrigger>
-                <Button className="w-full justify-between" variant="bordered">
-                  {category || "Select Category"}
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Select category"
-                selectedKeys={category ? [category] : []}
-                selectionMode="single"
-                onAction={handleCategorySelect}
-              >
-                {Categories.map((cat) => (
-                  <DropdownItem key={cat}>{cat}</DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
 
-            <Dropdown>
-              <DropdownTrigger>
-                <Button className="w-full justify-between" variant="bordered">
-                  {SortOptions.find((opt) => opt.key === sort)?.name ||
-                    "Sort By"}
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Sort posts"
-                selectedKeys={sort ? [sort] : []}
-                selectionMode="single"
-                onAction={handleSortSelect}
-              >
-                {SortOptions.map((option) => (
-                  <DropdownItem key={option.key}>{option.name}</DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button className="w-[120px] md:w-[160px] justify-between" variant="bordered">
+                    {selectedDistrict || "Select District"}
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Select district"
+                  selectedKeys={selectedDistrict ? [selectedDistrict] : []}
+                  selectionMode="single"
+                  onAction={handleDistrictSelect}
+                >
+                  {districts.map((district) => (
+                    <DropdownItem key={district.id}>{district.name}</DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+
+
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button className="w-[120px] md:w-[160px] justify-between" variant="bordered">
+                    {SortOptions.find((opt) => opt.key === sort)?.name ||
+                      "Sort By"}
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Sort posts"
+                  selectedKeys={sort ? [sort] : []}
+                  selectionMode="single"
+                  onAction={handleSortSelect}
+                >
+                  {SortOptions.map((option) => (
+                    <DropdownItem key={option.key}>{option.name}</DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+
           </div>
 
           {filterApplied && (
@@ -160,9 +182,14 @@ const Posts = () => {
                   Search: {debouncedSearchTerm}
                 </Chip>
               )}
-              {category && (
-                <Chip variant="flat" onClose={() => setCategory("")}>
-                  Category: {category}
+              {selectedDivision && (
+                <Chip variant="flat" onClose={() => setSelectedDivision("")}>
+                  Division: {selectedDivision}
+                </Chip>
+              )}
+              {selectedDistrict && (
+                <Chip variant="flat" onClose={() => setSelectedDistrict("")}>
+                  District: {selectedDistrict}
                 </Chip>
               )}
               {sort && (
@@ -175,7 +202,8 @@ const Posts = () => {
                 variant="light"
                 onClick={() => {
                   setSearchInput("");
-                  setCategory("");
+                  setSelectedDivision("");
+                  setSelectedDistrict("");
                   setSort("");
                 }}
               >
@@ -199,21 +227,12 @@ const Posts = () => {
           loader={
             hasMore && (
               <div className="grid lg:grid-cols-2 gap-6">
-                {/* <PostCardSkeleton />
-                <PostCardSkeleton /> */}
               </div>
             )
           }
           next={() => setPage((prev) => prev + 1)}
         >
           <div className="my-6 grid grid-cols-1 px-1 lg:grid-cols-2 gap-6">
-            {/* {posts
-              ? posts?.map((post: IPost, index: number) => (
-                  <PostCard key={index} full={false} post={post} />
-                ))
-              : Array.from({ length: 2 }).map((_, index) => (
-                  <PostCardSkeleton key={index} />
-                ))} */}
           </div>
         </InfiniteScroll>
       </div>

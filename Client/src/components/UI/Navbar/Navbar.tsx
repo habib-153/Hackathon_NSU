@@ -22,12 +22,13 @@ import { ThemeSwitch } from "../theme-switch";
 import NavbarDropdown from "./NavbarDropdown";
 
 import { siteConfig } from "@/src/config/site";
-import Logo from "@/src/assets/Logo2.jpg";
+import Logo from "@/src/assets/logo.png";
 import { useUser } from "@/src/context/user.provider";
 
 export const Navbar = () => {
   const { user } = useUser();
   const router = useRouter();
+// 009688
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">

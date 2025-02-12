@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, useEffect } from "react";
 import {
   FieldValues,
   FormProvider,
@@ -19,6 +19,7 @@ import generateImageDescription from "@/src/services/ImageDescription";
 import { useCreatePost } from "@/src/hooks/post.hook";
 import { useUser } from "@/src/context/user.provider";
 import dateToISO from "@/src/utils/dateToISO";
+import CTSelect from "@/src/components/form/CTSelect";
 
 interface IPostModalProps {
   isOpen: boolean;
@@ -45,6 +46,41 @@ const CreatePostModal = ({ isOpen, setIsOpen }: IPostModalProps) => {
 
   const { control, handleSubmit } = methods;
 
+  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>(
+    []
+  );
+  const [districts, setDistricts] = useState<{ id: string; name: string }[]>(
+    []
+  );
+  const [selectedDivision, setSelectedDivision] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+console.log(selectedDivision)
+  const divisionsOptions = divisions.map((division) => ({
+    key: division.id,
+    label: division.name,
+    value: division.id,
+  }));
+
+  const districtsOptions = districts.map((district) => ({
+    key: district.id,
+    label: district.name,
+    value: district.id,
+  }));
+
+  useEffect(() => {
+    fetch("https://bdapi.vercel.app/api/v.1/division")
+      .then((response) => response.json())
+      .then((data) => setDivisions(data.data));
+  }, []);
+
+  useEffect(() => {
+    if (selectedDivision) {
+      fetch(`https://bdapi.vercel.app/api/v.1/district/${selectedDivision}`)
+        .then((response) => response.json())
+        .then((data) => setDistricts(data.data));
+    }
+  }, [selectedDivision]);
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     const formData = new FormData();
 
@@ -52,6 +88,7 @@ const CreatePostModal = ({ isOpen, setIsOpen }: IPostModalProps) => {
       ...data,
       dateFound: dateToISO(data.dateFound),
       user: user!._id,
+      location: `${data.division}, ${data.district}`,
     };
 
     formData.append("data", JSON.stringify(postData));
@@ -122,26 +159,31 @@ const CreatePostModal = ({ isOpen, setIsOpen }: IPostModalProps) => {
                         <FXInput label="Title" name="title" />
                       </div>
                       <div className="min-w-fit flex-1">
-                        <CTDatePicker label="Found date" name="dateFound" />
+                        <CTDatePicker label="Crime date" name="crimeDate" />
                       </div>
                     </div>
                     <div className="flex flex-wrap gap-2 py-2">
                       <div className="min-w-fit flex-1">
-                        <FXInput label="Location" name="location" />
+                        <CTSelect
+                          label="Division"
+                          name="division"
+                          options={divisionsOptions}
+                          onChange={(value: string) =>
+                            setSelectedDivision(value)
+                          }
+                        />
                       </div>
                       <div className="min-w-fit flex-1">
-                        {/* <CTSelect label="City" name="city" options={cityOptions} /> */}
+                        <CTSelect
+                          disabled={!selectedDivision}
+                          label="District"
+                          name="district"
+                          options={districtsOptions}
+                          onChange={(value) => setSelectedDistrict(value)}
+                        />
                       </div>
                     </div>
                     <div className="flex flex-wrap gap-2 py-2">
-                      <div className="min-w-fit flex-1">
-                        {/* <CTSelect
-                    disabled={!categorySuccess}
-                    label="Category"
-                    name="category"
-                    options={categoryOption}
-                  /> */}
-                      </div>
                       <div className="min-w-fit flex-1">
                         <label
                           className="flex h-14 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-default-200 text-default-500 shadow-sm transition-all duration-100 hover:border-default-400"
