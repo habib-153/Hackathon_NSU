@@ -1,18 +1,25 @@
+"use server";
+
 import { revalidateTag } from "next/cache";
 
 import { getCurrentUser } from "../AuthService";
 
 import axiosInstance from "@/src/libs/AxiosInstance";
 
-export const createPost = async (data: FormData) => {
+export const createPost = async (formData: FormData): Promise<any> => {
   try {
-    const response = await axiosInstance.post("/posts", data);
+    const { data } = await axiosInstance.post("/posts", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     revalidateTag("posts");
 
-    return response.data;
-  } catch (error: any) {
-    //console.log(error.response ? error.response.data : error.message);
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to create post");
   }
 };
 

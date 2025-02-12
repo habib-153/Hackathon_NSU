@@ -12,7 +12,7 @@ const createPostIntoDB = async (payload: Partial<TPost>, image: TImageFile) => {
   if (image) {
     payload.image = image.path;
   }
-console.log(payload, 'Hello')
+
   const user = await User.findById(payload.author);
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found');
@@ -20,10 +20,6 @@ console.log(payload, 'Hello')
 
   if (user.status == 'BAN'){
     throw new AppError(httpStatus.BAD_REQUEST, 'User is banned');
-  }
-
-  if (user.isVerified == false){
-    throw new AppError(httpStatus.BAD_REQUEST, 'User is not verified')
   }
 
   const result = (await Post.create(payload)).populate('author');

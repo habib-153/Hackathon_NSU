@@ -4,9 +4,6 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
-export const POST_STATUS = {
-  BASIC: "BASIC"
-} as const;
 
 export type TPostCategory =
   | "Adventure"
@@ -21,13 +18,17 @@ export interface IPost {
   description: string;
   image: string;
   category: TPostCategory;
-  author?: IUser;
-  status: keyof typeof POST_STATUS;
+  author?: IUser | string;
   upVotes?: [IUser];
   upvoteCount?: number;
   downvoteCount?: number;
   downVotes?: [IUser];
   createdAt?: string;
+  crimeDate?: string;
+  postDate?: Date;
+  division?: string;
+  district?: string;
+  location?: string;
 }
 
 export interface IInput {

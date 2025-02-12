@@ -19,6 +19,7 @@ import { IPost } from "@/src/types";
 import { useUser } from "@/src/context/user.provider";
 import AuthModal from "@/src/components/UI/modal/AuthModal/AuthModal";
 import CreatePostModal from "@/src/components/UI/modal/CreatePost/CreatePostModal";
+import { useGetAllPosts } from "@/src/hooks/post.hook";
 
 const SortOptions = [
   { key: "date", name: "Date" },
@@ -28,7 +29,7 @@ const SortOptions = [
 
 const Posts = () => {
   const searchParams = useSearchParams();
-  const initialCategory = searchParams.get('category') || "";
+  const initialCategory = searchParams.get("category") || "";
 
   const [openModal, setOpenModal] = useState(false);
   const [openAuthModal, setOpenAuthModal] = useState(false);
@@ -41,8 +42,12 @@ const Posts = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [posts, setPosts] = useState<IPost[]>([]);
-  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
-  const [districts, setDistricts] = useState<{ id: string; name: string }[]>([]);
+  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>(
+    []
+  );
+  const [districts, setDistricts] = useState<{ id: string; name: string }[]>(
+    []
+  );
   const [selectedDivision, setSelectedDivision] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
 
@@ -93,6 +98,26 @@ const Posts = () => {
     setSelectedDistrict(String(key));
   };
 
+  const apiUrl = `${envConfig.baseApi}/posts?${new URLSearchParams({
+    ...(debouncedSearchTerm && { searchTerm: debouncedSearchTerm }),
+    page: page.toString(),
+  }).toString()}`;
+
+  const { data: postData } = useGetAllPosts(apiUrl);
+
+  useEffect(() => {
+    if (postData?.data) {
+      if (page === 1) {
+        setPosts(postData?.data);
+      } else {
+        setPosts((prev) => [...prev, ...postData?.data]);
+      }
+      setHasMore(postData?.data?.length === 10);
+    }
+  }, [postData, page]);
+
+  console.log(postData);
+  
   return (
     <div className="max-w-7xl relative mx-auto py-5">
       <div className="w-full text-right absolute -top-5 sm:top-5">
@@ -116,8 +141,12 @@ const Posts = () => {
             <div className="flex gap-2">
               <Dropdown>
                 <DropdownTrigger>
-                  <Button className="w-[120px] md:w-[160px] justify-between" variant="bordered">
-                    {divisions.find((div) => div.id === selectedDivision)?.name || "Select Division"}
+                  <Button
+                    className="w-[120px] md:w-[160px] justify-between"
+                    variant="bordered"
+                  >
+                    {divisions.find((div) => div.id === selectedDivision)
+                      ?.name || "Select Division"}
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu
@@ -127,16 +156,21 @@ const Posts = () => {
                   onAction={handleDivisionSelect}
                 >
                   {divisions.map((division) => (
-                    <DropdownItem key={division?.id} >{division.name}</DropdownItem>
+                    <DropdownItem key={division?.id}>
+                      {division.name}
+                    </DropdownItem>
                   ))}
                 </DropdownMenu>
               </Dropdown>
 
-
               <Dropdown>
                 <DropdownTrigger>
-                  <Button className="w-[120px] md:w-[160px] justify-between" variant="bordered">
-                    {districts.find((dist) => dist.id === selectedDistrict)?.name || "Select District"}
+                  <Button
+                    className="w-[120px] md:w-[160px] justify-between"
+                    variant="bordered"
+                  >
+                    {districts.find((dist) => dist.id === selectedDistrict)
+                      ?.name || "Select District"}
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu
@@ -146,15 +180,19 @@ const Posts = () => {
                   onAction={handleDistrictSelect}
                 >
                   {districts.map((district) => (
-                    <DropdownItem key={district.id}>{district.name}</DropdownItem>
+                    <DropdownItem key={district.id}>
+                      {district.name}
+                    </DropdownItem>
                   ))}
                 </DropdownMenu>
               </Dropdown>
 
-
               <Dropdown>
                 <DropdownTrigger>
-                  <Button className="w-[120px] md:w-[160px] justify-between" variant="bordered">
+                  <Button
+                    className="w-[120px] md:w-[160px] justify-between"
+                    variant="bordered"
+                  >
                     {SortOptions.find((opt) => opt.key === sort)?.name ||
                       "Sort By"}
                   </Button>
@@ -171,7 +209,6 @@ const Posts = () => {
                 </DropdownMenu>
               </Dropdown>
             </div>
-
           </div>
 
           {filterApplied && (
@@ -224,16 +261,10 @@ const Posts = () => {
             )
           }
           hasMore={hasMore}
-          loader={
-            hasMore && (
-              <div className="grid lg:grid-cols-2 gap-6">
-              </div>
-            )
-          }
+          loader={hasMore && <div className="grid lg:grid-cols-2 gap-6"></div>}
           next={() => setPage((prev) => prev + 1)}
         >
-          <div className="my-6 grid grid-cols-1 px-1 lg:grid-cols-2 gap-6">
-          </div>
+          <div className="my-6 grid grid-cols-1 px-1 lg:grid-cols-2 gap-6"></div>
         </InfiniteScroll>
       </div>
 
