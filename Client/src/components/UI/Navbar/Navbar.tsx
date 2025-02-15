@@ -73,7 +73,13 @@ export const Navbar = () => {
           </NavbarItem>
         ) : (
           <NavbarItem className="flex gap-2">
-            <Button onClick={() => router.push("/login")}>Login</Button>
+            <Button
+              className="relative text-[#009688] font-semibold bg-white border-[#009688] border-2 hover:text-white overflow-hidden transition-colors duration-300 ease-in-out group"
+              onClick={() => router.push("/login")}
+            >
+              <span className="relative z-10">Login</span>
+              <div className="absolute inset-0 bg-[#009688] -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-in-out" />
+            </Button>
           </NavbarItem>
         )}
         <NavbarMenuToggle className="lg:hidden" />
