@@ -28,7 +28,7 @@ import { useUser } from "@/src/context/user.provider";
 export const Navbar = () => {
   const { user } = useUser();
   const router = useRouter();
-// 009688
+  // 009688
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
@@ -73,7 +73,7 @@ export const Navbar = () => {
           </NavbarItem>
         ) : (
           <NavbarItem className="flex gap-2">
-            <Button onClick={() => router.push("/login")}>Login</Button>
+            <Button className="bg-[#009688] text-white" onClick={() => router.push("/login")}>Login</Button>
           </NavbarItem>
         )}
         <NavbarMenuToggle className="lg:hidden" />
