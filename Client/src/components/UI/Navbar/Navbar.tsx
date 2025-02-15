@@ -28,7 +28,7 @@ import { useUser } from "@/src/context/user.provider";
 export const Navbar = () => {
   const { user } = useUser();
   const router = useRouter();
-// 009688
+  // 009688
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
