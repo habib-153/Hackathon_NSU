@@ -21,6 +21,7 @@ import toast from 'react-hot-toast';
 import { useUser } from "@/src/context/user.provider";
 import AuthModal from "@/src/components/UI/modal/AuthModal/AuthModal";
 import CreatePostModal from "@/src/components/UI/modal/CreatePost/CreatePostModal";
+import { useGetAllPosts } from "@/src/hooks/post.hook";
 
 // Types
 interface IAuthor {
@@ -161,7 +162,7 @@ const PostCard = ({ post, onVote, userId }: { post: IPost; onVote: (postId: stri
 
 const Posts = () => {
   const searchParams = useSearchParams();
-  const initialCategory = searchParams.get('category') || "";
+  const initialCategory = searchParams.get("category") || "";
 
   const [openModal, setOpenModal] = useState(false);
   const [openAuthModal, setOpenAuthModal] = useState(false);
@@ -215,8 +216,12 @@ const Posts = () => {
     }
   ]);
   const [loading, setLoading] = useState(true);
-  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
-  const [districts, setDistricts] = useState<{ id: string; name: string }[]>([]);
+  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>(
+    []
+  );
+  const [districts, setDistricts] = useState<{ id: string; name: string }[]>(
+    []
+  );
   const [selectedDivision, setSelectedDivision] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
 
@@ -383,6 +388,26 @@ const Posts = () => {
     setPage(1);
   };
 
+  const apiUrl = `${envConfig.baseApi}/posts?${new URLSearchParams({
+    ...(debouncedSearchTerm && { searchTerm: debouncedSearchTerm }),
+    page: page.toString(),
+  }).toString()}`;
+
+  const { data: postData } = useGetAllPosts(apiUrl);
+
+  useEffect(() => {
+    if (postData?.data) {
+      if (page === 1) {
+        setPosts(postData?.data);
+      } else {
+        setPosts((prev) => [...prev, ...postData?.data]);
+      }
+      setHasMore(postData?.data?.length === 10);
+    }
+  }, [postData, page]);
+
+  console.log(postData);
+
   return (
     <div className="max-w-7xl relative mx-auto py-5">
       <div className="w-full text-right absolute -top-5 sm:top-5">
@@ -406,8 +431,12 @@ const Posts = () => {
             <div className="flex gap-2">
               <Dropdown>
                 <DropdownTrigger>
-                  <Button className="w-[120px] md:w-[160px] justify-between" variant="bordered">
-                    {divisions.find((div) => div.id === selectedDivision)?.name || "Select Division"}
+                  <Button
+                    className="w-[120px] md:w-[160px] justify-between"
+                    variant="bordered"
+                  >
+                    {divisions.find((div) => div.id === selectedDivision)
+                      ?.name || "Select Division"}
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu
@@ -417,15 +446,21 @@ const Posts = () => {
                   onAction={handleDivisionSelect}
                 >
                   {divisions.map((division) => (
-                    <DropdownItem key={division?.id}>{division.name}</DropdownItem>
+                    <DropdownItem key={division?.id}>
+                      {division.name}
+                    </DropdownItem>
                   ))}
                 </DropdownMenu>
               </Dropdown>
 
               <Dropdown>
                 <DropdownTrigger>
-                  <Button className="w-[120px] md:w-[160px] justify-between" variant="bordered">
-                    {districts.find((dist) => dist.id === selectedDistrict)?.name || "Select District"}
+                  <Button
+                    className="w-[120px] md:w-[160px] justify-between"
+                    variant="bordered"
+                  >
+                    {districts.find((dist) => dist.id === selectedDistrict)
+                      ?.name || "Select District"}
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu
@@ -435,14 +470,19 @@ const Posts = () => {
                   onAction={handleDistrictSelect}
                 >
                   {districts.map((district) => (
-                    <DropdownItem key={district.id}>{district.name}</DropdownItem>
+                    <DropdownItem key={district.id}>
+                      {district.name}
+                    </DropdownItem>
                   ))}
                 </DropdownMenu>
               </Dropdown>
 
               <Dropdown>
                 <DropdownTrigger>
-                  <Button className="w-[120px] md:w-[160px] justify-between" variant="bordered">
+                  <Button
+                    className="w-[120px] md:w-[160px] justify-between"
+                    variant="bordered"
+                  >
                     {SortOptions.find((opt) => opt.key === sort)?.name || "Sort By"}
                   </Button>
                 </DropdownTrigger>
@@ -506,46 +546,10 @@ const Posts = () => {
             )
           }
           hasMore={hasMore}
-          loader={
-            <div className="grid lg:grid-cols-2 gap-6">
-              {[1, 2].map((n) => (
-                <Card key={n} className="w-full">
-                  <CardBody>
-                    <div className="animate-pulse flex gap-4">
-                      <div className="flex flex-col items-center gap-2">
-                        <div className="h-8 w-8 bg-gray-200 rounded">hggh</div>
-                        <div className="h-4 w-4 bg-gray-200 rounded"></div>
-                        <div className="h-8 w-8 bg-gray-200 rounded"></div>
-                      </div>
-                      <div className="flex-1">
-                        <div className="h-4 w-1/4 bg-gray-200 rounded mb-4"></div>
-                        <div className="h-6 w-3/4 bg-gray-200 rounded mb-4"></div>
-                        <div className="h-32 bg-gray-200 rounded mb-4"></div>
-                        <div className="h-4 w-full bg-gray-200 rounded mb-2"></div>
-                        <div className="h-4 w-2/3 bg-gray-200 rounded mb-4"></div>
-                        <div className="flex gap-2">
-                          <div className="h-8 w-24 bg-gray-200 rounded"></div>
-                          <div className="h-8 w-24 bg-gray-200 rounded"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardBody>
-                </Card>
-              ))}
-            </div>
-          }
-          next={() => setPage(prev => prev + 1)}
+          loader={hasMore && <div className="grid lg:grid-cols-2 gap-6"></div>}
+          next={() => setPage((prev) => prev + 1)}
         >
-          <div className="my-6 grid grid-cols-1 px-1 lg:grid-cols-2 gap-6">
-            {posts.map((post) => (
-              <PostCard
-                key={post._id}
-                post={post}
-                userId={user?._id}
-                onVote={handleVote}
-              />
-            ))}
-          </div>
+          <div className="my-6 grid grid-cols-1 px-1 lg:grid-cols-2 gap-6"></div>
         </InfiniteScroll>
 
         {loading && posts.length === 0 && (

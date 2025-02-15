@@ -9,6 +9,12 @@ import {
 } from "react-hook-form";
 import { Modal, ModalContent } from "@nextui-org/modal";
 import { useRouter } from "next/navigation";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@nextui-org/dropdown";
 
 import Loading from "../../Loading";
 
@@ -19,12 +25,7 @@ import generateImageDescription from "@/src/services/ImageDescription";
 import { useCreatePost } from "@/src/hooks/post.hook";
 import { useUser } from "@/src/context/user.provider";
 import dateToISO from "@/src/utils/dateToISO";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from "@nextui-org/dropdown";
+import { IPost } from "@/src/types";
 
 interface IPostModalProps {
   isOpen: boolean;
@@ -44,7 +45,7 @@ const CreatePostModal = ({ isOpen, setIsOpen }: IPostModalProps) => {
   const {
     mutate: handleCreatePost,
     isPending: createPostPending,
-    isSuccess,
+    isSuccess
   } = useCreatePost();
 
   const methods = useForm();
@@ -72,7 +73,6 @@ const CreatePostModal = ({ isOpen, setIsOpen }: IPostModalProps) => {
         .then((response) => response.json())
         .then((data) => setDistricts(data.data));
     }
-    console.log(selectedDivision);
   }, [selectedDivision]);
 
   const handleDivisionSelect = (key: Key) => {
@@ -87,9 +87,10 @@ const CreatePostModal = ({ isOpen, setIsOpen }: IPostModalProps) => {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     const formData = new FormData();
 
-    const postData = {
+    const postData : Partial<IPost> = {
       ...data,
       crimeDate: dateToISO(data.crimeDate),
+      postDate: new Date(),
       author: user!._id,
       division: selectedDivision,
       district: selectedDistrict,
@@ -98,13 +99,14 @@ const CreatePostModal = ({ isOpen, setIsOpen }: IPostModalProps) => {
       }, ${districts.find((dist) => dist.id === selectedDistrict)?.name || ""}`,
     };
 
+    // Append the data correctly
     formData.append("data", JSON.stringify(postData));
 
-    for (let image of imageFiles) {
-      formData.append("itemImages", image);
-    }
+      formData.append("image", imageFiles[0]);
 
     handleCreatePost(formData);
+    setIsOpen(false);
+
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -134,7 +136,6 @@ const CreatePostModal = ({ isOpen, setIsOpen }: IPostModalProps) => {
       methods.setValue("description", response);
       setIsLoading(false);
     } catch (error: any) {
-      console.error(error);
       setError(error.message);
       setIsLoading(false);
     }
@@ -143,7 +144,6 @@ const CreatePostModal = ({ isOpen, setIsOpen }: IPostModalProps) => {
   if (!createPostPending && isSuccess) {
     router.push("/");
   }
-  console.log(selectedDistrict, selectedDivision);
 
   return (
     <>
@@ -204,8 +204,8 @@ const CreatePostModal = ({ isOpen, setIsOpen }: IPostModalProps) => {
                           <DropdownTrigger>
                             <Button
                               className="w-full justify-between"
-                              variant="bordered"
                               isDisabled={!selectedDivision}
+                              variant="bordered"
                             >
                               {districts.find(
                                 (dist) => dist.id === selectedDistrict

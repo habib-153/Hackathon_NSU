@@ -11,11 +11,11 @@ const router = express.Router();
 
 router.post(
   '/',
-  auth(USER_ROLE.USER, USER_ROLE.ADMIN),
+  //auth(USER_ROLE.USER, USER_ROLE.ADMIN),
   multerUpload.single('image'),
   //validateImageFileRequest(ImageFilesArrayZodSchema),
   parseBody,
-  validateRequest(PostValidation.createPostValidationSchema),
+  //validateRequest(PostValidation.createPostValidationSchema),
   PostControllers.createPost
 );
 

@@ -14,7 +14,7 @@ const createPost = catchAsync(async (req, res) => {
     req.body,
     req.file as TImageFile
   );
-
+console.log(req.body)
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,

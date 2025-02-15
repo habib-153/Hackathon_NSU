@@ -22,10 +22,6 @@ const createPostIntoDB = async (payload: Partial<TPost>, image: TImageFile) => {
     throw new AppError(httpStatus.BAD_REQUEST, 'User is banned');
   }
 
-  if (user.isVerified == false){
-    throw new AppError(httpStatus.BAD_REQUEST, 'User is not verified')
-  }
-
   const result = (await Post.create(payload)).populate('author');
   await User.findByIdAndUpdate(user?._id, { $inc: { postCount: 1 } });
 
@@ -35,6 +31,7 @@ const createPostIntoDB = async (payload: Partial<TPost>, image: TImageFile) => {
 const getAllPostsFromDB = async (query: Record<string, unknown>) => {
   const { sort, searchTerm, category, page = 1, limit = 10 } = query;
 
+  //console.log(query, 'Hello')
   const pageNumber = Math.max(Number(page), 1);
   const limitNumber = Math.max(Number(limit), 1);
   const skip = (pageNumber - 1) * limitNumber;

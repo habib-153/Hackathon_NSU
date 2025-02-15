@@ -3,6 +3,7 @@ import { toast } from "sonner";
 
 import { addDownvote, addUpvote, createPost, deletePost, getAllPosts, getSinglePost, removeDownvote, removeUpvote, updatePost } from "../services/PostServices";
 
+
 export const useCreatePost = () => {
   return useMutation<any, Error, FormData>({
     mutationKey: ["CREATE_POST"],

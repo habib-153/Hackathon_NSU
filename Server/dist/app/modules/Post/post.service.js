@@ -24,6 +24,7 @@ const createPostIntoDB = (payload, image) => __awaiter(void 0, void 0, void 0, f
     if (image) {
         payload.image = image.path;
     }
+    console.log(payload, 'Hello');
     const user = yield user_model_1.User.findById(payload.author);
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found');
@@ -40,6 +41,7 @@ const createPostIntoDB = (payload, image) => __awaiter(void 0, void 0, void 0, f
 });
 const getAllPostsFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const { sort, searchTerm, category, page = 1, limit = 10 } = query;
+    //console.log(query, 'Hello')
     const pageNumber = Math.max(Number(page), 1);
     const limitNumber = Math.max(Number(limit), 1);
     const skip = (pageNumber - 1) * limitNumber;
